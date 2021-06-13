@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!hadoop-sequence-parser-1.0.jar
 *.war
 *.nar
 *.ear

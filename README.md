@@ -210,7 +210,14 @@ In case you need to recompile SeQual, the prerequisites are the following:
 git clone https://github.com/roigalegot/SeQual
 ```
 
-To compile SeQual, you just need to execute the following Maven command from within the SeQual root directory:
+Due to SeQual (batch) depending on HSP 1.0, you will need to manually add the included jar in your Maven local repository.
+You can use the following command from within the SeQual root directory:
+
+```
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=SeQual-Model/dependency-jars/hadoop-sequence-parser-1.0.jar -DgroupId=es.udc.gac -DartifactId=hadoop-sequence-parser -Dversion=1.0
+```
+
+Now, to compile SeQual, you just need to execute the following Maven command from within the SeQual root directory:
 
 ```
 mvn package -DskipTests
