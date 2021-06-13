@@ -23,7 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.roi.galegot.sequal.sequalmodel.service.AppService;
+import com.oscar.castellanos.sequal.sequalmodel.service.AppService;
+import com.oscar.castellanos.sequal.sequalmodel.stream.service.AppServiceFactory;
 
 /**
  * The Class ConsoleInterface.
@@ -82,7 +83,7 @@ public class ConsoleInterface {
 		position = findOption(args, ConsoleOptions.GENERATECONFIGFILE.getOpt());
 		if (position != -1) {
 			if (lengthArgs == 3) {
-				service = new AppService();
+				service = AppServiceFactory.getAppService();
 				service.setOutput(output);
 				service.generateConfigFile();
 				return;
@@ -143,12 +144,12 @@ public class ConsoleInterface {
 			logLevel = Level.toLevel(args[position + 1]);
 		}
 
-		service = new AppService();
-
+		service = AppServiceFactory.getAppService(configFile);
 		service.setInput(input);
 		service.setOutput(output);
 		service.setConfigFile(configFile);
 		service.setLogLevel(logLevel);
+		
 		if (StringUtils.isNotBlank(masterConf)) {
 			service.setMasterConf(masterConf);
 		}
