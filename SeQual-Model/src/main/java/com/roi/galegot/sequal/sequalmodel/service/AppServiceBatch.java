@@ -30,6 +30,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
+import com.oscar.castellanos.sequal.sequalmodel.service.AppService;
 import com.roi.galegot.sequal.sequalmodel.common.Sequence;
 import com.roi.galegot.sequal.sequalmodel.dnafilereader.DNAFileReaderFactory;
 import com.roi.galegot.sequal.sequalmodel.util.ExecutionParametersManager;
@@ -38,9 +39,9 @@ import com.roi.galegot.sequal.sequalmodel.writer.WriterUtils;
 /**
  * The Class AppService.
  */
-public class AppService {
+public class AppServiceBatch implements AppService {
 
-	private static final Logger LOGGER = Logger.getLogger(AppService.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(AppServiceBatch.class.getName());
 
 	private SparkConf sparkConf;
 	private JavaSparkContext sparkContext;
@@ -62,7 +63,7 @@ public class AppService {
 	/**
 	 * Instantiates a new app service.
 	 */
-	public AppService() {
+	public AppServiceBatch() {
 		this.filterService = new FilterService();
 		this.trimService = new TrimService();
 		this.statService = new StatService();
@@ -72,6 +73,7 @@ public class AppService {
 	/**
 	 * Configures the Spark app and its context.
 	 */
+	@Override
 	public void start() {
 
 		if (this.logLevel == null) {
@@ -97,6 +99,7 @@ public class AppService {
 	/**
 	 * Stops the Spark app and its context.
 	 */
+	@Override
 	public void stop() {
 		LOGGER.info("Stopping Spark context.\n");
 
@@ -142,6 +145,7 @@ public class AppService {
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
+	@Override
 	public void read() throws IOException {
 		if (StringUtils.isNotBlank(this.secondInput)) {
 			LOGGER.info("Reading files " + this.input + " and " + this.secondInput + ".\n");
@@ -160,6 +164,7 @@ public class AppService {
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
+	@Override
 	public void write() throws IOException {
 		LOGGER.info("Writing results to " + this.output + ".\n");
 		WriterUtils.writeHDFS(this.sequences, this.output);
@@ -170,6 +175,7 @@ public class AppService {
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
+	@Override
 	public void writeWithSingleFile() throws IOException {
 		LOGGER.info("Writing results to " + this.output + ".\n");
 		WriterUtils.writeHDFSAndMergeToFile(this.sequences, this.output, this.getFileName(this.input),
@@ -179,6 +185,7 @@ public class AppService {
 	/**
 	 * Filter.
 	 */
+	@Override
 	public void filter() {
 		LOGGER.info("Starting filtering.\n");
 
@@ -190,6 +197,7 @@ public class AppService {
 	/**
 	 * Format.
 	 */
+	@Override
 	public void format() {
 		LOGGER.info("Starting formatting.\n");
 
@@ -201,6 +209,7 @@ public class AppService {
 	/**
 	 * Trim.
 	 */
+	@Override
 	public void trim() {
 		LOGGER.info("Starting trimming.\n");
 
@@ -214,6 +223,7 @@ public class AppService {
 	 *
 	 * @param isFirst the is first
 	 */
+	@Override
 	public void measure(Boolean isFirst) {
 		LOGGER.info("Starting measuring.\n");
 
@@ -225,6 +235,7 @@ public class AppService {
 	/**
 	 * Prints the stats.
 	 */
+	@Override
 	public void printStats() {
 		LOGGER.info("Printing stats.\n");
 		System.out.println(this.statService.getResultsAsString());
@@ -235,6 +246,7 @@ public class AppService {
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
+	@Override
 	public void generateConfigFile() throws IOException {
 
 		LOGGER.info("Generating configuration file at location" + this.output
@@ -257,11 +269,12 @@ public class AppService {
 	 *
 	 * @param sparkLogLevel the new log level
 	 */
+	@Override
 	public void setLogLevel(Level logLevel) {
 		LOGGER.info("Setting log level " + logLevel + " to Spark and dependencies loggers.\n");
 
 		this.logLevel = logLevel;
-
+		
 		org.apache.logging.log4j.core.config.Configurator.setLevel("es.udc.gac.hadoop",
 				org.apache.logging.log4j.Level.getLevel(logLevel.toString()));
 
@@ -276,6 +289,7 @@ public class AppService {
 	 * @param param the param
 	 * @return the parameter
 	 */
+	@Override
 	public String getParameter(String param) {
 		return ExecutionParametersManager.getParameter(param);
 	}
@@ -286,6 +300,7 @@ public class AppService {
 	 * @param param specified parameter
 	 * @param value specified value for the parameter
 	 */
+	@Override
 	public void setParameter(String param, String value) {
 		ExecutionParametersManager.setParameter(param, value);
 	}
@@ -331,6 +346,7 @@ public class AppService {
 	 *
 	 * @return the input
 	 */
+	@Override
 	public String getInput() {
 		return this.input;
 	}
@@ -340,6 +356,7 @@ public class AppService {
 	 *
 	 * @param input the new input
 	 */
+	@Override
 	public void setInput(String input) {
 		this.input = input;
 	}
@@ -349,6 +366,7 @@ public class AppService {
 	 *
 	 * @return the second input
 	 */
+	@Override
 	public String getSecondInput() {
 		return this.secondInput;
 	}
@@ -358,6 +376,7 @@ public class AppService {
 	 *
 	 * @param secondInput the new second input
 	 */
+	@Override
 	public void setSecondInput(String secondInput) {
 		this.secondInput = secondInput;
 	}
@@ -367,6 +386,7 @@ public class AppService {
 	 *
 	 * @return the output
 	 */
+	@Override
 	public String getOutput() {
 		return this.output;
 	}
@@ -376,6 +396,7 @@ public class AppService {
 	 *
 	 * @param output the new output
 	 */
+	@Override
 	public void setOutput(String output) {
 		this.output = output;
 	}
@@ -385,6 +406,7 @@ public class AppService {
 	 *
 	 * @return the config file
 	 */
+	@Override
 	public String getConfigFile() {
 		return this.configFile;
 	}
@@ -394,6 +416,7 @@ public class AppService {
 	 *
 	 * @param configFile the new config file
 	 */
+	@Override
 	public void setConfigFile(String configFile) {
 		this.configFile = configFile;
 		ExecutionParametersManager.setConfigFile(this.configFile);
@@ -404,6 +427,7 @@ public class AppService {
 	 *
 	 * @return the master conf
 	 */
+	@Override
 	public String getMasterConf() {
 		return this.masterConf;
 	}
@@ -413,6 +437,7 @@ public class AppService {
 	 *
 	 * @param masterConf the new master conf
 	 */
+	@Override
 	public void setMasterConf(String masterConf) {
 		LOGGER.info("Setting Spark master configuration as " + masterConf + ".\n");
 
@@ -424,6 +449,7 @@ public class AppService {
 	 *
 	 * @return the spark log level
 	 */
+	@Override
 	public Level getLogLevel() {
 		return this.logLevel;
 	}

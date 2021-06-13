@@ -15,20 +15,41 @@
 	<name>SeQual-Model</name>
 
 	<properties>
-		<spark.version>2.4.0</spark.version>
+		<spark.version>3.1.1</spark.version>
 		<hadoop.sequence.parser.version>1.0</hadoop.sequence.parser.version>
+		<log4j2.version>2.12.1</log4j2.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.11</artifactId>
+			<artifactId>spark-core_2.12</artifactId>
 			<version>${spark.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>es.udc.gac</groupId>
 			<artifactId>hadoop-sequence-parser</artifactId>
 			<version>${hadoop.sequence.parser.version}</version>
+		</dependency>
+		<dependency>
+    			<groupId>org.apache.spark</groupId>
+    			<artifactId>spark-sql_2.12</artifactId>
+    			<version>${spark.version}</version>
+		</dependency>
+		<dependency>
+    			<groupId>org.apache.spark</groupId>
+    			<artifactId>spark-catalyst_2.12</artifactId>
+    			<version>${spark.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j2.version}</version>
 		</dependency>
 	</dependencies>
 

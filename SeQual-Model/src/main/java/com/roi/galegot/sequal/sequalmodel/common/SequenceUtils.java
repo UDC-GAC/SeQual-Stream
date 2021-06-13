@@ -176,8 +176,11 @@ public class SequenceUtils {
 	 * @return the first sequence from pair
 	 */
 	public static Sequence getFirstSequenceFromPair(Sequence sequence) {
-		return new Sequence(sequence.getName(), sequence.getSequenceString(), sequence.getExtra(),
-				sequence.getQualityString());
+		if (sequence.getHasQuality())
+			return new Sequence(sequence.getName(), sequence.getSequenceString(), sequence.getExtra(),
+					sequence.getQualityString());
+		else 
+			return new Sequence(sequence.getName(), sequence.getSequenceString());
 	}
 
 	/**
@@ -187,8 +190,11 @@ public class SequenceUtils {
 	 * @return the second sequence from pair
 	 */
 	public static Sequence getSecondSequenceFromPair(Sequence sequence) {
-		return new Sequence(sequence.getNamePair(), sequence.getSequenceStringPair(), sequence.getExtraPair(),
+		if (sequence.getHasQuality())
+			return new Sequence(sequence.getNamePair(), sequence.getSequenceStringPair(), sequence.getExtraPair(),
 				sequence.getQualityStringPair());
+		else 
+			return new Sequence(sequence.getNamePair(), sequence.getSequenceStringPair());
 	}
 
 	/**
