@@ -307,6 +307,7 @@
                         </ScrollPane>
                      </content>
                   </TitledPane>
+                  <CheckBox fx:id="selectStreamingCheckBox" layoutX="22.0" layoutY="65.0" mnemonicParsing="false" text="Streaming" />
                   <CheckBox fx:id="filterCheckBox" layoutX="22.0" layoutY="29.0" mnemonicParsing="false" text="Filter" />
                   <CheckBox fx:id="trimmerCheckBox" layoutX="88.0" layoutY="29.0" mnemonicParsing="false" text="Trim" />
                   <CheckBox fx:id="formatterCheckBox" layoutX="155.0" layoutY="29.0" mnemonicParsing="false" text="Format" />

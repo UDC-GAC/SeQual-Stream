@@ -35,7 +35,6 @@ import com.roi.galegot.sequal.sequalmodel.filter.FilterParametersNaming;
 import com.roi.galegot.sequal.sequalmodel.filter.Filters;
 import com.roi.galegot.sequal.sequalmodel.formatter.FormatterParametersNaming;
 import com.roi.galegot.sequal.sequalmodel.formatter.Formatters;
-import com.roi.galegot.sequal.sequalmodel.service.AppService;
 import com.roi.galegot.sequal.sequalmodel.stat.StatParametersNaming;
 import com.roi.galegot.sequal.sequalmodel.stat.StatsNaming;
 import com.roi.galegot.sequal.sequalmodel.trimmer.TrimmerParametersNaming;
@@ -54,6 +53,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+
+import com.oscar.castellanos.sequal.sequalmodel.service.AppService;
+import com.oscar.castellanos.sequal.sequalmodel.stream.filter.FiltersStream;
+import com.oscar.castellanos.sequal.sequalmodel.stream.formatter.FormattersStream;
+import com.oscar.castellanos.sequal.sequalmodel.stream.service.AppServiceFactory;
+import com.oscar.castellanos.sequal.sequalmodel.stream.trimmer.TrimmersStream;
 
 public class Controller {
 
@@ -235,6 +240,10 @@ public class Controller {
 	@FXML
 	private CheckBox meanQualityCheckBox;
 
+	// Select streaming or batch
+	@FXML
+	private CheckBox selectStreamingCheckBox;
+	
 	private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
 	@FXML
@@ -327,7 +336,11 @@ public class Controller {
 	}
 
 	private void runJob() {
-		AppService appService = new AppService();
+		AppService appService;
+		
+		boolean streaming = this.selectStreamingCheckBox.isSelected();
+		
+		appService = AppServiceFactory.getAppService(streaming);
 
 		String input = this.inputFileField.getText();
 		String secondInput = this.secondInputFileField.getText();
@@ -366,17 +379,20 @@ public class Controller {
 			}
 
 			if (this.trimmerCheckBox.isSelected()) {
-				this.parseTrimmers(appService);
+				if (streaming) this.parseTrimmersStream(appService); 
+				else this.parseTrimmers(appService);
 				appService.trim();
 			}
 
 			if (this.filterCheckBox.isSelected()) {
-				this.parseFilters(appService);
+				if (streaming) this.parseFiltersStream(appService);
+				else this.parseFilters(appService);
 				appService.filter();
 			}
 
 			if (this.formatterCheckBox.isSelected()) {
-				this.parseFormatters(appService);
+				if (streaming) this.parseFormattersStream(appService);
+				else this.parseFormatters(appService);
 				appService.format();
 			}
 
@@ -639,5 +655,200 @@ public class Controller {
 		}
 
 		appService.setParameter(StatParametersNaming.STATISTICS_LIST, statsList);
+	}
+	
+	//// Streaming
+	private void parseFiltersStream(AppService appService) {
+		String singleFiltersList = "";
+		String doubleFiltersList = "";
+
+		// Single filters
+		// Length
+		if (this.filterLengthCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.LENGTH_MIN_VAL,
+					this.filterLengthMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.LENGTH_MAX_VAL,
+					this.filterLengthMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.LENGTH.name());
+		}
+		// Mean Quality
+		if (this.filterMeanQualityCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.QUALITY_MIN_VAL,
+					this.filterMeanQualityMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.QUALITY_MAX_VAL,
+					this.filterMeanQualityMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.QUALITY.name());
+		}
+		// Quality Score
+		if (this.filterQualityScoreCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.QUALITY_SCORE_MIN_VAL,
+					this.filterQualityScoreMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.QUALITY_SCORE_MAX_VAL,
+					this.filterQualityScoreMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.QUALITYSCORE.name());
+		}
+		// GCBases
+		if (this.filterGCBasesCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.GCBASES_MIN_VAL,
+					this.filterGCBasesMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.GCBASES_MAX_VAL,
+					this.filterGCBasesMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.GCBASES.name());
+		}
+		// GCContent
+		if (this.filterGCContentCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.GCCONTENT_MIN_VAL,
+					this.filterGCContentMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.GCCONTENT_MAX_VAL,
+					this.filterGCContentMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.GCCONTENT.name());
+		}
+		// NAmb
+		if (this.filterNAmbCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.NAMB_MIN_VAL, this.filterNAmbMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.NAMB_MAX_VAL, this.filterNAmbMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.NAMB.name());
+		}
+		// NAmbP
+		if (this.filterNAmbPCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.NAMBP_MIN_VAL, this.filterNAmbPMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.NAMBP_MAX_VAL, this.filterNAmbPMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.NAMBP.name());
+		}
+		// Base
+		if (this.filterBaseNCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.BASE, this.filterBaseNBasesTextField.getText());
+			appService.setParameter(FilterParametersNaming.BASE_MIN_VAL, this.filterBaseNMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.BASE_MAX_VAL, this.filterBaseNMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.BASEN.name());
+		}
+		// Base P
+		if (this.filterBasePCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.BASEP, this.filterBasePBasesTextField.getText());
+			appService.setParameter(FilterParametersNaming.BASEP_MIN_VAL, this.filterBasePMinValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.BASEP_MAX_VAL, this.filterBasePMaxValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.BASEP.name());
+		}
+		// Pattern
+		if (this.filterPatternCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.PATTERN, this.filterPatternValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.REP_PATTERN, this.filterPatternRepsTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.PATTERN.name());
+		}
+		// No-Pattern
+		if (this.filterNoPatternCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.NO_PATTERN, this.filterNoPatternValueTextField.getText());
+			appService.setParameter(FilterParametersNaming.REP_NO_PATTERN, this.filterNoPatternRepsTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.NOPATTERN.name());
+		}
+		// Non-IUPAC
+		if (this.filterNonIupacCheckBox.isSelected()) {
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.NONIUPAC.name());
+		}
+
+		// Group filters
+		// Distinct
+		if (this.filterDistinctCheckBox.isSelected()) {
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.DISTINCT.name());
+		}
+		// Almost distinct
+		if (this.filterAlmostDistinctCheckBox.isSelected()) {
+			appService.setParameter(FilterParametersNaming.MAX_DIFFERENCE,
+					this.filterAlmostDistinctDiffValueTextField.getText());
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.ALMOSTDISTINCT.name());
+		}
+		// Reverse distinct
+		if (this.filterReverseDistinctCheckBox.isSelected()) {
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.REVERSEDISTINCT.name());
+		}
+		// Complement distinct
+		if (this.filterComplementaryDistinctCheckBox.isSelected()) {
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.COMPLEMENTDISTINCT.name());
+		}
+		// Reverse complement distinct
+		if (this.filterReverseComplementaryDistinctCheckBox.isSelected()) {
+			doubleFiltersList = doubleFiltersList.concat("|" + FiltersStream.REVERSECOMPLEMENTDISTINCT.name());
+		}
+
+		appService.setParameter(FilterParametersNaming.SINGLE_FILTERS_LIST, singleFiltersList);
+		appService.setParameter(FilterParametersNaming.GROUP_FILTERS_LIST, doubleFiltersList);
+	}
+	
+	private void parseTrimmersStream(AppService appService) {
+		String trimmersList = "";
+
+		// Trim left
+		if (this.trimLeftCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_LEFT, this.trimLeftTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMLEFT.name());
+		}
+		// Trim right
+		if (this.trimRightCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_RIGHT, this.trimRightTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMRIGHT.name());
+		}
+		// Trim left p
+		if (this.trimLeftPCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_LEFTP, this.trimLeftPTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMLEFTP.name());
+		}
+		// Trim right
+		if (this.trimRightPCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_RIGHTP, this.trimRightPTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMRIGHTP.name());
+		}
+		// Trim left to length
+		if (this.trimLeftToLengthCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_LEFT_TO_LENGTH,
+					this.trimLeftToLengthTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMLEFTTOLENGTH.name());
+		}
+		// Trim right to length
+		if (this.trimRightToLengthCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_RIGHT_TO_LENGTH,
+					this.trimRightToLengthTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMRIGHTTOLENGTH.name());
+		}
+		// Trim qual left
+		if (this.trimQualityLeftCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_QUAL_LEFT, this.trimQualityLeftTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMQUALLEFT.name());
+		}
+		// Trim qual right
+		if (this.trimQualityRightCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_QUAL_RIGHT, this.trimQualityRightTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMQUALRIGHT.name());
+		}
+		// Trim N left
+		if (this.trimNLeftCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_N_LEFT, this.trimNLeftTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMNLEFT.name());
+		}
+		// Trim N right
+		if (this.trimNRightCheckBox.isSelected()) {
+			appService.setParameter(TrimmerParametersNaming.TRIM_N_RIGHT, this.trimNRightTextField.getText());
+			trimmersList = trimmersList.concat("|" + TrimmersStream.TRIMNRIGHT.name());
+		}
+
+		appService.setParameter(TrimmerParametersNaming.TRIMMERS_LIST, trimmersList);
+	}
+	
+	private void parseFormattersStream(AppService appService) {
+		String formattersList = "";
+
+		// DNA To RNA
+		if (this.dnaToRnaCheckBox.isSelected()) {
+			formattersList = formattersList.concat("|" + FormattersStream.DNATORNA.name());
+		}
+		// RNA To DNA
+		if (this.rnaToDnaCheckBox.isSelected()) {
+			formattersList = formattersList.concat("|" + FormattersStream.RNATODNA.name());
+		}
+		// FASTQ To FASTA
+		if (this.fastqToFastaCheckBox.isSelected()) {
+			formattersList = formattersList.concat("|" + FormattersStream.FASTQTOFASTA.name());
+		}
+
+		appService.setParameter(FormatterParametersNaming.FORMATTERS_LIST, formattersList);
 	}
 }
