@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>sequal</artifactId>
+		<groupId>com.roi.galegot</groupId>
+		<version>1.0</version>
+	</parent>
+
+	<groupId>com.roi.galegot.sequal</groupId>
+	<artifactId>sequal-cmd</artifactId>
+	
+	<name>SeQual-CMD</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.roi.galegot.sequal</groupId>
+			<artifactId>sequal-model</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<version>${maven.assembly.version}</version>
+				<executions>
+					<execution>
+						<id>make-executable-jar-with-dependencies</id>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>com.roi.galegot.sequal.sequalcmd.ConsoleInterface</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

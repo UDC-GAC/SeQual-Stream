@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.roi.galegot</groupId>
+	<artifactId>sequal</artifactId>
+	<version>1.0</version>
+
+	<name>SeQual</name>
+	<url>https://github.com/roigalegot/SeQual</url>
+
+	<packaging>pom</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<junit.version>4.13</junit.version>
+		<jacoco.version>0.8.5</jacoco.version>
+		<maven.compiler.version>3.8.1</maven.compiler.version>
+		<maven.compiler.source.version>1.8</maven.compiler.source.version>
+		<maven.compiler.target.version>1.8</maven.compiler.target.version>
+		<maven.assembly.version>3.2.0</maven.assembly.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<source>${maven.compiler.source.version}</source>
+					<target>${maven.compiler.target.version}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<version>${maven.assembly.version}</version>
+				<executions>
+					<execution>
+						<id>make-executable-jar-with-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<modules>
+		<module>SeQual-GUI</module>
+		<module>SeQual-CMD</module>
+		<module>SeQual-Model</module>
+	</modules>
+</project>

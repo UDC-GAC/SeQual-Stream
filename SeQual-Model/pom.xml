@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>sequal</artifactId>
+		<groupId>com.roi.galegot</groupId>
+		<version>1.0</version>
+	</parent>
+
+	<groupId>com.roi.galegot.sequal</groupId>
+	<artifactId>sequal-model</artifactId>
+
+	<name>SeQual-Model</name>
+
+	<properties>
+		<spark.version>2.4.0</spark.version>
+		<hadoop.sequence.parser.version>1.0</hadoop.sequence.parser.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-core_2.11</artifactId>
+			<version>${spark.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>es.udc.gac</groupId>
+			<artifactId>hadoop-sequence-parser</artifactId>
+			<version>${hadoop.sequence.parser.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+	</build>
+</project>
