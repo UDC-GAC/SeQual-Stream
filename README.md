@@ -1,35 +1,41 @@
-[![Build Status](https://travis-ci.com/roigalegot/SeQual.svg?token=az3pEmytBgoPiNLjCssG&branch=master)](https://travis-ci.com/roigalegot/SeQual)
+# SeQual-Stream
+**SeQual-Stream** is a Big Data tool to perform quality control operations (e.g. filtering, trimming) on genomic datasets in a scalable way, currently supporting single-end and paired-end reads in FASTQ/FASTA formats.
 
-# SeQual
-**SeQual** is a Big Data tool to perform quality control operations (e.g. filtering, trimming) on genomic datasets in a scalable way, currently supporting single-end and paired-end reads in FASTQ/FASTA formats.
+It is a tool derived from **SeQual**, which can be found on its own [repository](https://github.com/UDC-GAC/SeQual/).
+SeQual-Stream adapts its operation to work in streaming mode and process the data as it is downloaded to HDFS or another file system.
 
-This tool is specifically oriented to work with large amounts of data taking advantage of distributed-memory systems such as clusters and clouds looking forward to offer the best performance. SeQual is implemented in Java on top of the open-source [Apache Spark](http://spark.apache.org) framework to manage such distributed data processing over a cluster of machines.
-
-### Citation
-
-If you use **SeQual** in your research, please cite our work using the following reference:
-
-> Roberto R. Expósito, Roi Galego-Torreiro, Jorge González-Domínguez. [SeQual: Big Data Tool to Perform Quality Control and Data Preprocessing of Large NGS Datasets](https://doi.org/10.1109/ACCESS.2020.3015016). IEEE Access 8: 146075-146084 (2020).
+This tool is specifically oriented to work with large amounts of data taking advantage of distributed-memory systems such as clusters and clouds looking forward to offer the best performance. SeQual-Stream is implemented in Java on top of the open-source [Apache Spark](http://spark.apache.org) framework to manage such distributed data processing over a cluster of machines and its module [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) to process the stream data as micro-batches.
 
 ## Getting Started
 
-SeQual can be executed both on Windows and UNIX-based (GNU/Linux, macOS) systems provided that you meet the following prerequisites.
+SeQual-Stream can be used both on Windows and UNIX based systems. Nevertheless, to be able to compile and use SeQual-Stream, you need a valid installation of the following:
 
-### Prerequisites
+* **Java Development Kit (JDK)** version 1.11 or above. 
+* **Apache Maven** version 3.0 or above. 
+* **Apache Spark** version 3.0 or above. 
 
-* **Spark distribution version 2.X.Y**, working either in local or cluster mode
-  * For cluster mode, see [Spark's Cluster Mode Overview](https://spark.apache.org/docs/latest/cluster-overview.html)
-* **Java Runtime Environment (JRE) version 1.8**
-  * Current Spark 2.X.Y versions do not support JRE 11 (or later), which is planned for the upcoming [Spark 3.0](https://issues.apache.org/jira/browse/SPARK-24417) release
-* Download SeQual binaries from the releases page and unzip the tarball. On Linux, just follow the instructions below:
+You can clone SeQual-Stream repository with the following command:
 
 ```
-unzip SeQual-bin-1.0.zip
+git clone https://github.com/oscar-castellanos/SeQual-Stream
 ```
 
-## Execution
+Due to SeQual (batch mode) depending on HSP 1.0, you will need to manually add the included jar in your Maven local repository.
+You can use the following command from within the SeQual-Stream root directory:
 
-SeQual can be used through a command-line interface (SeQual-CMD) or by executing the graphical user interface (SeQual-GUI). The specific usage of each module is explained separately below.
+```
+mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=SeQual-Model/dependency-jars/hadoop-sequence-parser-1.0.jar -DgroupId=es.udc.gac -DartifactId=hadoop-sequence-parser -Dversion=1.0
+```
+
+Now, to compile SeQual-Stream, you just need to execute the following Maven command from within the SeQual-Stream root directory:
+
+```
+mvn package -DskipTests
+```
+
+This will generate a folder called /target inside the three modules of the project (SeQual-Model, SeQual-CMD and SeQual-GUI), containing each one the appropiated jar file. How to use each module is explained below.
+
+Note that the first time you execute the previous command, Maven will download all the plugins and related dependencies it needs to fulfill the command. From a clean installation of Maven, this can take quite a while. If you execute the command again, Maven will now have what it needs, so it will be able to execute the command much more quickly.
 
 ### SeQual-CMD
 
@@ -39,7 +45,7 @@ SeQual-CMD allows the processing of NGS datasets from a console interface. To do
 spark-submit [SPARK_ARGS] bin/sequal-cmd.jar [SEQUAL_ARGS]
 ```
 
-To specify the specific operations to be performed over the input datasets, together with their necessary parameters, a Java properties file is used as input argument (option -c). SeQual includes a blank properties file at the *etc* directory (ExecutionParameters.properties) that can be used as template, which includes all the possible operations and parameters. Additionally, SeQual-CMD provides the option -g to generate a new blank properties file as shown in the examples below.
+To specify the specific operations to be performed over the input datasets, together with their necessary parameters, a Java properties file is used as input argument (option -c). SeQual-Stream includes a blank properties file at the *etc* directory (ExecutionParameters.properties) that can be used as template, which includes all the possible operations and parameters. Additionally, SeQual-CMD provides the option -g to generate a new blank properties file as shown in the examples below.
 
 All the available input arguments to SeQual-CMD are the following:
 
@@ -105,7 +111,7 @@ In order to use SeQual-GUI, you need a JRE 1.8 flavour **with bundled JavaFX** s
 
 #### GUI
 
-The graphical interface of SeQual is shown in the following picture.
+The graphical interface of SeQual-Stream is shown in the following picture.
 
 ![](doc/interfazexpl.png)
 
@@ -118,18 +124,21 @@ This interface is mainly composed by 6 different fields:
 * **5: Statistics sections.** Allows the user to select which statistics should be computed.
 * **6: Output section.** A console-like window that shows useful information to the user about the status of the data processing.
 
-## SeQual features
+## SeQual-Stream features
+SeQual-Stream allow switching between batch (SeQual) or streaming (SeQual-Stream) mode using the parameter **MODE** on its properties file. 
 
-SeQual offers mainly four groups of features or operations that can be performed over the input datasets, grouped based on the operation's objective. These groups are:
+On batch mode four groups of features or operations that can be performed over the input datasets are offered, grouped based on the operation's objective.
+On streaming mode, a subset of this operations are supported.
+These groups of are:
 
-* **Filters**: They remove the sequences that do not comply with the specified thresholds specified by the user.
+* **Filters**: They remove the sequences that do not comply with the specified thresholds specified by the user. There are single filters as well as group filter (only in batch mode).
 * **Trimmers**: They trim the sequences following the specified parameters.
 * **Formatters**: They apply data transformations to the sequences.
-* **Statistics**: They compute different statistics in the dataset.
+* **Statistics** (only in batch mode): They compute different statistics in the dataset.
     
 Besides the previous mentioned groups, there are other features grouped under the name **Transversals**, which allow the user to configure the application more thoroughly, specifying aspects like the log level or the Spark configuration.
 
-### Filters
+### Single Filters
 
 * **LENGTH**: Filters sequences based on an indicated maximum and/or minimum length threshold.
 * **QUALITYSCORE**: Filters sequences based on an indicated maximum and/or minimum quality score per base threshold, removing them if any of its bases is outside the threshold. Quality score from each base is calculated following Illumina encoding.
@@ -143,6 +152,8 @@ Besides the previous mentioned groups, there are other features grouped under th
 * **NOPATTERN**: Filters sequences according to the existence of a specified pattern (that is, if it does not contain the pattern, the sequence is removed) along with its repetitions (for example, the pattern ATC with two repeats would be ATCATC).
 * **BASEN**: Filters sequences according to whether they contain a maximum and/or minimum number of one or several base types (or even base groups).
 * **BASEP**: Filters sequences according to whether they contain a maximum and/or minimum number of one or several base types (or even base groups).
+
+### Group Filters (only in batch mode)
 
 * **DISTINCT**: Filters duplicated sequences maintaining the ones with the highest quality (if they have associated quality).
 * **ALMOSTDISTINCT**: Filters duplicated sequences maintaining the ones with the highest quality (if they have associated quality), allowing an indicated margin of differences (for example, two sequences with 2 differents bases can be considered equals if the specified limit allows it).
@@ -169,7 +180,7 @@ Besides the previous mentioned groups, there are other features grouped under th
 * **RNATODNA**: Transforms RNA sequences to DNA sequences.
 * **FASTQTOFASTA**: Transforms sequences in FASTQ format to FASTA format. In this case base the information of the quality is lost.
 
-### Statistics
+### Statistics (only in batch mode)
 
 * **COUNT**: Calculates the total number of sequences in the dataset before and after performing the indicated operations on them.
 * **MEANLENGTH**: Calculates the mean length of the sequences in the dataset before and after performing the indicated operations on them.
@@ -177,66 +188,28 @@ Besides the previous mentioned groups, there are other features grouped under th
 
 ### Transversals
 
-* **Reading of FASTA format datasets:** Allows to read datasets of sequences in FASTA format.
-* **Reading of FASTQ format datasets:** Allows to read datasets of sequences in FASTA format.
-* **Reading of paired-end FASTA format datasets:** Allows to read datasets of paired-end sequences in FASTA format. The sequences must be separated in two different input files.
-* **Reading of paired-end FASTQ format datasets:** Allows to read datasets of paired-end sequences in FASTA format. The sequences must be separated in two different input files.
-* **Writing of resulting sequences:** Allows to write the resulting sequences after the operations in the indicated path, generating two different folders in case of paired-end datasets. This type of writing is done by default, writing the result in several output text files.
+* **Reading of FASTA format datasets:** Allows to read datasets of sequences in FASTA format. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
+* **Reading of FASTQ format datasets:** Allows to read datasets of sequences in FASTA format. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
+* **Reading of paired-end FASTA format datasets:** Allows to read datasets of paired-end sequences in FASTA format. The sequences must be separated in two different input files. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
+* **Reading of paired-end FASTQ format datasets:** Allows to read datasets of paired-end sequences in FASTA format. The sequences must be separated in two different input files. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
+* **Writing of resulting sequences:** Allows to write the resulting sequences after the operations in the indicated path, generating two different folders in case of paired-end datasets. This type of writing is done by default, writing the result in several output text files. In streaming mode, the output text files are written into several subfolders sorted by name.
 * **Writing of resulting sequences to an individual file:** Allows to write the resulting sequences after the operations to a single output file in the indicated path, or in to two output files in case of paired-end datasets.
-* **Configure Spark execution mode:** Allows to configure the master URL for Spark, being local[*] by default (which implies using all the available cores in the machine where SeQual is executed).
+* **Configure Spark execution mode:** Allows to configure the master URL for Spark, being local[*] by default (which implies using all the available cores in the machine where SeQual-Stream is executed).
 * **Configure the level of log shown to the user:** Allows to configure the log level shown to the user by Spark and other libraries. The default level is ERROR.
 * **Generation and reading of a properties file:** Allows to generate a template file where the operations to be carried out can be specified, as well as the necessary parameters for them.
+* **Select between Batch or Streaming mode:** Allows switching between batch mode (SeQual) or streaming mode (SeQual-Stream).
 
 ## Used tools
-
 * [Java](https://www.java.com) - Programming Language
 * [Apache Spark](https://spark.apache.org) - Big Data Framework
-* [Hadoop Sequence Parser](https://github.com/rreye/hsp) - Input File Reader
 * [Apache Maven](https://maven.apache.org) - Dependency Management
-* [JavaFX](https://openjfx.io) - Graphic User Interface
-* [Travis CI](https://travis-ci.com/roigalegot/SeQual) - Continuous Integration Tool
-
-## Compilation
-
-In case you need to recompile SeQual, the prerequisites are the following:
-
-* **Java Development Kit (JDK) version 1.8** (or later)
-  * JAVA_HOME environmental variable must be set accordingly
-* **Apache Maven version 3.X**
-  * See [Installing Maven](https://maven.apache.org/install.html)
-* Download the source code of SeQual from the releases page and unzip the tarball. Alternatively, clone the github repository by executing the following command:
-
-```
-git clone https://github.com/roigalegot/SeQual
-```
-
-Due to SeQual (batch) depending on HSP 1.0, you will need to manually add the included jar in your Maven local repository.
-You can use the following command from within the SeQual root directory:
-
-```
-mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=SeQual-Model/dependency-jars/hadoop-sequence-parser-1.0.jar -DgroupId=es.udc.gac -DartifactId=hadoop-sequence-parser -Dversion=1.0
-```
-
-Now, to compile SeQual, you just need to execute the following Maven command from within the SeQual root directory:
-
-```
-mvn package -DskipTests
-```
-
-Note that the first time you execute the previous command, Maven will download all the plugins and related dependencies it needs to fulfill the command. From a clean installation of Maven, this can take quite a while. If you execute the command again, Maven will now have what it needs, so it will be able to execute the command much more quickly.
-
-As a result of a successful compilation, Maven generates a directory called *target* within each of the three modules of the project (i.e. SeQual-Model, SeQual-CMD and SeQual-GUI), which contain the appropiated jar files to execute SeQual. Example for executing the GUI version from within the SeQual root directory:
-
-```
-spark-submit ./SeQual-GUI/target/sequal-gui.jar
-```
 
 ## Authors
 
-* **Roi Galego Torreiro** (https://www.linkedin.com/in/roi-galego)
+* **&Oacute;scar Castellanos Rodr&iacute;guez**
 * **Roberto R. Exp&oacute;sito** (http://gac.udc.es/~rreye)
-* **Jorge Gonz&aacute;lez Dom&iacute;nguez** (http://gac.udc.es/~jgonzalezd)
+* **Juan Touriño Dom&iacute;nguez** (https://gac.udc.es/~juan/)
 
 ## License
 
-SeQual is distributed as free software and is publicly available under the GNU AGPLv3 license (see the [LICENSE](LICENSE) file for more details).
+SeQual-Stream is distributed as free software and is publicly available under the GNU AGPLv3 license (see the [LICENSE](LICENSE) file for more details).
