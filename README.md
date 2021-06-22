@@ -3,8 +3,9 @@
 
 It is a tool derived from **SeQual**, which can be found on its own [repository](https://github.com/UDC-GAC/SeQual/).
 SeQual-Stream adapts its operation to work in streaming mode and process the data as it is downloaded to HDFS or another file system.
+It allows switching between batch mode (former SeQual) and streaming mode (new SeQual-Stream).
 
-This tool is specifically oriented to work with large amounts of data taking advantage of distributed-memory systems such as clusters and clouds looking forward to offer the best performance. SeQual-Stream is implemented in Java on top of the open-source [Apache Spark](http://spark.apache.org) framework to manage such distributed data processing over a cluster of machines and its module [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html) to process the stream data as micro-batches.
+In the same way as SeQual, this tool is specifically oriented to work with large amounts of data taking advantage of distributed-memory systems such as clusters and clouds looking forward to offer the best performance. SeQual-Stream is implemented in Java on top of the open-source [Apache Spark](http://spark.apache.org) framework to manage such distributed data processing over a cluster of machines and introduces the streaming mode using the module [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html).
 
 ## Getting Started
 
@@ -39,10 +40,10 @@ Note that the first time you execute the previous command, Maven will download a
 
 ### SeQual-CMD
 
-SeQual-CMD allows the processing of NGS datasets from a console interface. To do so, you just need to use the *spark-submit* command provided by Spark to launch the appropriate jar file (sequal-cmd.jar) located at the *bin* directory.
+SeQual-CMD allows the processing of NGS datasets from a console interface. To do so, you just need to use the *spark-submit* command provided by Spark to launch the appropriate jar file (sequal-cmd.jar) located at the *SeQual-CMD/target* directory.
 
 ```
-spark-submit [SPARK_ARGS] bin/sequal-cmd.jar [SEQUAL_ARGS]
+spark-submit [SPARK_ARGS] SeQual-CMD/target/sequal-cmd.jar [SEQUAL-STREAM_ARGS]
 ```
 
 To specify the specific operations to be performed over the input datasets, together with their necessary parameters, a Java properties file is used as input argument (option -c). SeQual-Stream includes a blank properties file at the *etc* directory (ExecutionParameters.properties) that can be used as template, which includes all the possible operations and parameters. Additionally, SeQual-CMD provides the option -g to generate a new blank properties file as shown in the examples below.
@@ -67,7 +68,7 @@ All the available input arguments to SeQual-CMD are the following:
 The following command processes a single-end FASTQ dataset using the TRIMRIGHT operation in order to trim sequences 15 positions (i.e. bases) starting from the right:
 
 ```
-spark-submit bin/sequal-cmd.jar -i dataset.fastq -o output -c etc/ExecutionParameters.properties -t
+spark-submit SeQual-CMD/target/sequal-cmd.jar -i dataset.fastq -o output -c etc/ExecutionParameters.properties -t
 ```
 
 The properties file used in the previous example contains the following values:
@@ -76,11 +77,16 @@ The properties file used in the previous example contains the following values:
 Trimmers=TRIMRIGHT
 TrimRight=15
 ```
+In streaming mode, if in the previous example the input dataset was stored on the local file system (e.g. in the $HOME/datasets path) rather than HDFS, you could use the following command:
+
+```
+spark-submit SeQual-CMD/target/sequal-cmd.jar -i file://$HOME/datasets/dataset.fastq -o output -c etc/ExecutionParameters.properties -t
+```
 
 The following example shows the processing of a paired-end dataset (i.e. two input files) using the QUALITY operation in order to filter out those paired sequences whose mean quality is below 25
 
 ```
-spark-submit bin/sequal-cmd.jar -i dataset_1.fastq -di dataset_2.fastq -o output -c etc/ExecutionParameters.properties -f
+spark-submit SeQual-CMD/target/sequal-cmd.jar -i dataset_1.fastq -di dataset_2.fastq -o output -c etc/ExecutionParameters.properties -f
 ```
 In the previous example, the properties file contains:
 
@@ -92,17 +98,17 @@ QualityMinVal=25
 The last example shows how to create a new blank properties file (ExecutionParameters.properties) using the option -g. The template is generated within the directory specified using the option -o:
 
 ```
-spark-submit bin/sequal-cmd.jar -g -o ouput
+spark-submit SeQual-CMD/target/sequal-cmd.jar -g -o ouput
 ```
 
 ### SeQual-GUI
 
 SeQual-GUI allows using a graphical user interface rather than the console, thus greatly simplifying its usage to non-computer science experts. This GUI has been implemented upon the [JavaFX](https://openjfx.io) library.
 
-To execute SeQual-GUI, you must also rely on the spark-submit command to do so. Unlike SeQual-CMD, no additional arguments are needed, so just launch the appropriate jar file (sequal-gui.jar) which is also located at the *bin* directory:
+To execute SeQual-GUI, you must also rely on the spark-submit command to do so. Unlike SeQual-CMD, no additional arguments are needed, so just launch the appropriate jar file (sequal-gui.jar) which is located at the *SeQual-GUI/target* directory:
 
 ```
-spark-submit [SPARK_ARGS] bin/sequal-gui.jar
+spark-submit [SPARK_ARGS] SeQual-GUI/target/sequal-gui.jar
 ```
 
 #### Important notes about JavaFX
@@ -117,7 +123,7 @@ The graphical interface of SeQual-Stream is shown in the following picture.
 
 This interface is mainly composed by 6 different fields:
 
-* **1: Configuration section.** Allows the user to specify different parameters, like the input file, the output folder, the log level...
+* **1: Configuration section.** Allows the user to specify different parameters, like the input file, the output folder, the log level, using or not streaming mode ...
 * **2: Filters section.** Allows the user to select which filters should be applied, as well as their corresponding parameters.
 * **3: Trimmers section.** Allows the user to select which trimmers should be applied, as well as their corresponding parameters.
 * **4: Formmatters sections.** Allows the user to select which formatters should be applied.
@@ -125,13 +131,13 @@ This interface is mainly composed by 6 different fields:
 * **6: Output section.** A console-like window that shows useful information to the user about the status of the data processing.
 
 ## SeQual-Stream features
-SeQual-Stream allow switching between batch (SeQual) or streaming (SeQual-Stream) mode using the parameter **MODE** on its properties file. 
+SeQual-Stream allows switching between batch (SeQual) or streaming (SeQual-Stream) mode using the parameter **Mode** on its properties file. 
 
 On batch mode four groups of features or operations that can be performed over the input datasets are offered, grouped based on the operation's objective.
 On streaming mode, a subset of this operations are supported.
 These groups of are:
 
-* **Filters**: They remove the sequences that do not comply with the specified thresholds specified by the user. There are single filters as well as group filter (only in batch mode).
+* **Filters**: They remove the sequences that do not comply with the specified thresholds specified by the user. There are single filters as well as group filters (only in batch mode).
 * **Trimmers**: They trim the sequences following the specified parameters.
 * **Formatters**: They apply data transformations to the sequences.
 * **Statistics** (only in batch mode): They compute different statistics in the dataset.
@@ -192,7 +198,7 @@ Besides the previous mentioned groups, there are other features grouped under th
 * **Reading of FASTQ format datasets:** Allows to read datasets of sequences in FASTA format. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
 * **Reading of paired-end FASTA format datasets:** Allows to read datasets of paired-end sequences in FASTA format. The sequences must be separated in two different input files. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
 * **Reading of paired-end FASTQ format datasets:** Allows to read datasets of paired-end sequences in FASTA format. The sequences must be separated in two different input files. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
-* **Writing of resulting sequences:** Allows to write the resulting sequences after the operations in the indicated path, generating two different folders in case of paired-end datasets. This type of writing is done by default, writing the result in several output text files. In streaming mode, the output text files are written into several subfolders sorted by name.
+* **Writing of resulting sequences:** Allows to write the resulting sequences after the operations in the indicated path, generating two different folders in case of paired-end datasets. This type of writing is done by default, writing the result in several output text files. In streaming mode, the output text files are written into several subfolders.
 * **Writing of resulting sequences to an individual file:** Allows to write the resulting sequences after the operations to a single output file in the indicated path, or in to two output files in case of paired-end datasets.
 * **Configure Spark execution mode:** Allows to configure the master URL for Spark, being local[*] by default (which implies using all the available cores in the machine where SeQual-Stream is executed).
 * **Configure the level of log shown to the user:** Allows to configure the log level shown to the user by Spark and other libraries. The default level is ERROR.
