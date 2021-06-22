@@ -214,7 +214,7 @@ Besides the previous mentioned groups, there are other features grouped under th
 
 * **&Oacute;scar Castellanos Rodr&iacute;guez**
 * **Roberto R. Exp&oacute;sito** (http://gac.udc.es/~rreye)
-* **Juan Touriño Dom&iacute;nguez** (https://gac.udc.es/~juan/)
+* **Juan Touriño Dom&iacute;nguez** (https://gac.udc.es/~juan)
 
 ## License
 
