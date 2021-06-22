@@ -213,8 +213,8 @@ Besides the previous mentioned groups, there are other features grouped under th
 ## Authors
 
 * **&Oacute;scar Castellanos Rodr&iacute;guez**
-* **Roberto R. Exp&oacute;sito** (http://gac.udc.es/~rreye)
-* **Juan Touriño Dom&iacute;nguez** (https://gac.udc.es/~juan)
+* **Roberto R. Exp&oacute;sito** (https://gac.udc.es/~rober/)
+* **Juan Touriño Dom&iacute;nguez** (https://gac.udc.es/~juan/)
 
 ## License
 
