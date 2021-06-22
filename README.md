@@ -15,7 +15,7 @@ SeQual-Stream can be used both on Windows and UNIX based systems. Nevertheless, 
 * **Apache Maven** version 3.0 or above. 
 * **Apache Spark** version 3.0 or above. 
 
-You can clone SeQual-Stream repository with the following command:
+You can clone the SeQual-Stream repository with the following command:
 
 ```
 git clone https://github.com/oscar-castellanos/SeQual-Stream
@@ -126,8 +126,8 @@ This interface is mainly composed by 6 different fields:
 * **1: Configuration section.** Allows the user to specify different parameters, like the input file, the output folder, the log level, using or not streaming mode ...
 * **2: Filters section.** Allows the user to select which filters should be applied, as well as their corresponding parameters.
 * **3: Trimmers section.** Allows the user to select which trimmers should be applied, as well as their corresponding parameters.
-* **4: Formmatters sections.** Allows the user to select which formatters should be applied.
-* **5: Statistics sections.** Allows the user to select which statistics should be computed.
+* **4: Formmatters section.** Allows the user to select which formatters should be applied.
+* **5: Statistics section.** Allows the user to select which statistics should be computed.
 * **6: Output section.** A console-like window that shows useful information to the user about the status of the data processing.
 
 ## SeQual-Stream features
