@@ -1,11 +1,7 @@
 # SeQual-Stream
-**SeQual-Stream** is a Big Data tool to perform quality control operations (e.g. filtering, trimming) on genomic datasets in a scalable way, currently supporting single-end and paired-end reads in FASTQ/FASTA formats.
+**SeQual-Stream** is a Big Data tool to perform quality control operations (e.g. filtering, trimming) on genomic datasets in a scalable way, currently supporting single-end and paired-end reads in FASTQ/FASTA formats. It allows switching between batch mode and streaming mode, allowing in the latter the processing of the data as it is downloaded to HDFS or another file system.
 
-It is a tool derived from **SeQual**, which can be found on its own [repository](https://github.com/UDC-GAC/SeQual/).
-SeQual-Stream adapts its operation to work in streaming mode and process the data as it is downloaded to HDFS or another file system.
-It allows switching between batch mode (former SeQual) and streaming mode (new SeQual-Stream).
-
-In the same way as SeQual, this tool is specifically oriented to work with large amounts of data taking advantage of distributed-memory systems such as clusters and clouds looking forward to offer the best performance. SeQual-Stream is implemented in Java on top of the open-source [Apache Spark](http://spark.apache.org) framework to manage such distributed data processing over a cluster of machines and introduces the streaming mode using the module [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html).
+This tool is specifically oriented to work with large amounts of data taking advantage of distributed-memory systems such as clusters and clouds looking forward to offer the best performance. SeQual-Stream is implemented in Java on top of the open-source [Apache Spark](http://spark.apache.org) framework to manage such distributed data processing over a cluster of machines and implements the streaming mode using the module [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html).
 
 ## Getting Started
 
@@ -18,10 +14,10 @@ SeQual-Stream can be used both on Windows and UNIX based systems. Nevertheless, 
 You can clone the SeQual-Stream repository with the following command:
 
 ```
-git clone https://github.com/oscar-castellanos/SeQual-Stream
+git clone https://github.com/UDC-GAC/SeQual-Stream
 ```
 
-Due to SeQual (batch mode) depending on HSP 1.0, you will need to manually add the included jar in your Maven local repository.
+Due to SeQual-Stream's batch mode depending on HSP 1.0, you will need to manually add the included jar in your Maven local repository.
 You can use the following command from within the SeQual-Stream root directory:
 
 ```
@@ -131,7 +127,7 @@ This interface is mainly composed by 6 different fields:
 * **6: Output section.** A console-like window that shows useful information to the user about the status of the data processing.
 
 ## SeQual-Stream features
-SeQual-Stream allows switching between batch (SeQual) or streaming (SeQual-Stream) mode using the parameter **Mode** on its properties file. 
+SeQual-Stream allows switching between batch or streaming mode using the parameter **Mode** on its properties file. 
 
 On batch mode four groups of features or operations that can be performed over the input datasets are offered, grouped based on the operation's objective.
 On streaming mode, a subset of this operations are supported.
@@ -203,7 +199,7 @@ Besides the previous mentioned groups, there are other features grouped under th
 * **Configure Spark execution mode:** Allows to configure the master URL for Spark, being local[*] by default (which implies using all the available cores in the machine where SeQual-Stream is executed).
 * **Configure the level of log shown to the user:** Allows to configure the log level shown to the user by Spark and other libraries. The default level is ERROR.
 * **Generation and reading of a properties file:** Allows to generate a template file where the operations to be carried out can be specified, as well as the necessary parameters for them.
-* **Select between Batch or Streaming mode:** Allows switching between batch mode (SeQual) or streaming mode (SeQual-Stream).
+* **Select between Batch or Streaming mode:** Allows switching between batch mode or streaming mode.
 
 ## Used tools
 * [Java](https://www.java.com) - Programming Language
