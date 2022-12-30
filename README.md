@@ -11,6 +11,7 @@ SeQual-Stream can be used both on Windows and UNIX based systems. Nevertheless, 
 * **Apache Maven** version 3.0 or above. 
 * **Apache Spark** version 3.0 or above. 
 * **Apache Hadoop** version 2.10 or above, since HDFS is required to store and process the input datasets.
+* **Hadoop Sequence Parser (HSP) library** version 1.0.
 
 You can clone the SeQual-Stream repository with the following command:
 
