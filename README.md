@@ -5,19 +5,23 @@ This tool is specifically oriented to work with large amounts of data taking adv
 
 ## Getting Started
 
-SeQual-Stream can be used both on Windows and UNIX based systems. Nevertheless, to be able to compile and use SeQual-Stream, you need a valid installation of the following:
+SeQual-Stream can be used both on Windows and UNIX based systems. Nevertheless, to be able to run SeQual-Stream, you need a valid installation of the following:
 
-* **Java Development Kit (JDK)** version 11 or above.
-* **Apache Maven** version 3.0 or above. 
-* **Apache Spark** version 3.0 or above. 
+* **Java Runtime Environment (JRE)** version 1.8 or above.
+* **Apache Spark** version 3.0 or above.
 * **Apache Hadoop** version 2.10 or above, since HDFS is required to store and process the input datasets.
-* **Hadoop Sequence Parser (HSP) library** version 1.0.
 
 You can clone the SeQual-Stream repository with the following command:
 
 ```
 git clone https://github.com/UDC-GAC/SeQual-Stream
 ```
+
+To compile SeQual-Stream's source code, the prerequisites are the following:
+
+* **Java Development Kit (JDK)** version 11 or above.
+* **Apache Maven** version 3.0 or above.
+* **Hadoop Sequence Parser (HSP) library** version 1.0.
 
 Due to SeQual-Stream's batch mode depending on HSP 1.0, you will need to manually add the included jar in your Maven local repository.
 You can use the following command from within the SeQual-Stream root directory:
