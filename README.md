@@ -36,7 +36,7 @@ Now, to compile SeQual-Stream, you just need to execute the following Maven comm
 mvn package -DskipTests
 ```
 
-This will generate a folder called target inside the SeQual-CMD and SeQual-GUI modules of the project, containing each one the appropiated jar file. How to use each module is explained below.
+This will generate a folder called target inside the SeQual-CMD and SeQual-GUI modules of the project, containing each one the appropriate jar file. How to use each module is explained below.
 
 Note that the first time you execute the previous command, Maven will download all the plugins and related dependencies it needs to fulfill the command. From a clean installation of Maven, this can take quite a while. If you execute the command again, Maven will now have what it needs, so it will be able to execute the command much more quickly.
 
@@ -115,7 +115,7 @@ spark-submit [SPARK_ARGS] SeQual-GUI/target/sequal-gui.jar
 
 #### Important notes about JavaFX
 
-In order to use SeQual-GUI, you need a JRE 1.8 flavour **with bundled JavaFX** support. For simplicity, it is **recommended to use Oracle JRE 1.8** which already includes the required JavaFX libraries. Otherwise, you must ensure that such libraries are available on your system or that you use a JRE 1.8 flavour with them (i.e. BellSoft, Azu Zulu). Note that most JRE 1.8 versions from OpenJDK do not provide JavaFX libraries, which are available to be installed separately on some systems. On UNIX-based systems, you can use the [SDKMAN manager](https://sdkman.io) to install a JRE 1.8 flavour with JavaFX, which are those listed with the FX suffix when executing the command: sdk list java.
+In order to use SeQual-GUI, you need a JRE 1.8 flavour **with bundled JavaFX** support. For simplicity, it is **recommended to use Oracle JRE 1.8** which already includes the required JavaFX libraries. Otherwise, you must ensure that such libraries are available on your system or that you use a JRE 1.8 flavour with them (i.e. BellSoft, Azu Zulu). Note that most JRE 1.8 versions from OpenJDK do not provide JavaFX libraries, which are available to be installed separately on some systems. On UNIX-based systems, you can use the [SDKMAN! manager](https://sdkman.io) to install a JRE 1.8 flavour with JavaFX, which are those flavours listed with the FX suffix when executing the command *sdk list java*.
 
 #### GUI
 
@@ -123,14 +123,14 @@ The graphical interface of SeQual-Stream is shown in the following picture.
 
 ![](doc/interfazexpl.png)
 
-This interface is mainly composed by 6 different sections:
+This interface is mainly composed of 6 different sections (numbered in the picture):
 
 * **1: Configuration section.** Allows the user to specify different parameters, like the input file, the output folder, the log level, using or not streaming mode ...
 * **2: Filters section.** Allows the user to select which filters should be applied, as well as their corresponding parameters.
 * **3: Trimmers section.** Allows the user to select which trimmers should be applied, as well as their corresponding parameters.
 * **4: Formmatters section.** Allows the user to select which formatters should be applied.
 * **5: Statistics section.** Allows the user to select which statistics should be computed.
-* **6: Output section.** A console-like window that shows useful information to the user about the status of the data processing.
+* **6: Output section.** A console-like window that shows to the user useful information about the status of the data processing.
 
 ## SeQual-Stream features
 SeQual-Stream allows switching between batch or streaming mode using the parameter **Mode** on its properties file. 
@@ -164,7 +164,7 @@ Besides the previous mentioned groups, there are other features grouped under th
 ### Group Filters (only in batch mode)
 
 * **DISTINCT**: Filters duplicated sequences maintaining the ones with the highest quality (if they have associated quality).
-* **ALMOSTDISTINCT**: Filters duplicated sequences maintaining the ones with the highest quality (if they have associated quality), allowing an indicated margin of differences (for example, two sequences with 2 differents bases can be considered equals if the specified limit allows it).
+* **ALMOSTDISTINCT**: Filters duplicated sequences maintaining the ones with the highest quality (if they have associated quality), allowing an indicated margin of differences (for example, two sequences with two different bases can be considered equal if the specified limit allows it).
 * **REVERSEDISTINCT**: Filters reverse sequences maintaining the ones with the highest quality (if they have associated quality). For example, the reverse sequence of ATG is GTA.
 * **COMPLEMENTDISTINCT**: Filters complementary sequences maintaining the ones with the highest quality (if they have associated quality). For example, the complementary sequence of ATG is TAC.
 * **REVERSECOMPLEMENTDISTINCT**: Filters reverse complementary sequences maintaining the ones with the highest quality (if they have associated quality). For example, the reverse complementary sequence of ATG is CAT.
@@ -177,7 +177,7 @@ Besides the previous mentioned groups, there are other features grouped under th
 * **TRIMRIGHTP**: Trims sequences according to an indicated percentage of the total number of bases starting from the 3'-end (right).
 * **TRIMQUALLEFT**: Trims sequences until achieving an indicated mean sequence quality starting from the 5'-end (left).
 * **TRIMQUALRIGHT**: Trims sequences until achieving an indicated mean sequence quality starting from the 3'-end (right).
-* **TRIMNLEFT**: Trims N-terminal tails with a specified minimum length at the 5'-end (left). A N-terminal tail is a set of N bases found at the beginning or end of a sequence. For example, the three Ns of the sequence NNNATCGAT form a N-terminal tail at the beginning.
+* **TRIMNLEFT**: Trims N-terminal tails with a specified minimum length at the 5'-end (left). An N-terminal tail is a set of N bases found at the beginning or end of a sequence. For example, the three Ns of the sequence NNNATCGAT form an N-terminal tail at the beginning.
 * **TRIMNRIGHT**: Trims N-terminal tails with a specified minimum length at the 3'-end (right).
 * **TRIMLEFTTOLENGTH**: Trims sequences to a specified maximum length starting from the 5'-end (left).
 * **TRIMRIGHTTOLENGTH**: Trims sequences to a specified maximum length starting from the 3'-end (right).
@@ -201,7 +201,7 @@ Besides the previous mentioned groups, there are other features grouped under th
 * **Reading of paired-end FASTA format datasets:** Allows to read datasets of paired-end sequences in FASTA format. The sequences must be separated in two different input files. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
 * **Reading of paired-end FASTQ format datasets:** Allows to read datasets of paired-end sequences in FASTQ format. The sequences must be separated in two different input files. In streaming mode, datasets can be stored in another file system besides HDFS and can be in the process of being downloaded.
 * **Writing of resulting sequences:** Allows to write the resulting sequences after the operations in the indicated path, generating two different folders in case of paired-end datasets. This type of writing is done by default, writing the result in several output text files. In streaming mode, the output text files are written into several subfolders.
-* **Writing of resulting sequences to an individual file:** Allows to write the resulting sequences after the operations to a single output file in the indicated path, or in to two output files in case of paired-end datasets.
+* **Writing of resulting sequences to an individual file:** Allows to write the resulting sequences after the operations to a single output file in the indicated path, or to two output files in case of paired-end datasets.
 * **Configure Spark execution mode:** Allows to configure the master URL for Spark, being local[*] by default (which implies using all the available cores in the machine where SeQual-Stream is executed).
 * **Configure the level of log shown to the user:** Allows to configure the log level shown to the user by Spark and other libraries. The default level is ERROR.
 * **Generation and reading of a properties file:** Allows to generate a template file where the operations to be carried out can be specified, as well as the necessary parameters for them.
