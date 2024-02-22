@@ -3,6 +3,10 @@
 
 This tool is specifically oriented to work with large amounts of data taking advantage of distributed-memory systems such as clusters and clouds looking forward to offer the best performance. SeQual-Stream is implemented in Java on top of the open-source [Apache Spark](http://spark.apache.org) framework to manage such distributed data processing over a cluster of machines and implements the streaming mode using the module [Spark Structured Streaming](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html).
 
+### More information
+> &Oacute;scar Castellanos-Rodr&iacute;guez, Roberto R. Exp&oacute;sito, Juan Touriño, [SeQual-Stream: approaching stream processing to quality control of NGS datasets](https://doi.org/10.1186/s12859-023-05530-7). BMC Bioinformatics, 24:403, October 2023.
+> &Oacute;scar Castellanos-Rodr&iacute;guez, Roberto R. Exp&oacute;sito, Juan Touriño, [Accelerating the quality control of genetic sequences through stream processing](https://doi.org/10.1145/3555776.3577785), in Proceedings of the 38th ACM/SIGAPP Symposium on Applied Computing (SAC '23), Tallinn, Estonia, March 2023, pp. 398–401.
+
 ## Getting Started
 
 SeQual-Stream can be used both on Windows and UNIX based systems. Nevertheless, to be able to run SeQual-Stream, you need a valid installation of the following:
@@ -214,7 +218,7 @@ Besides the previous mentioned groups, there are other features grouped under th
 
 ## Authors
 
-* **&Oacute;scar Castellanos-Rodr&iacute;guez**
+* **&Oacute;scar Castellanos-Rodr&iacute;guez** (https://gac.udc.es/~oscar.castellanos/)
 * **Roberto R. Exp&oacute;sito** (https://gac.udc.es/~rober/)
 * **Juan Touriño** (https://gac.udc.es/~juan/)
 
