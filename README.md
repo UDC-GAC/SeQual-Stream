@@ -5,6 +5,7 @@ This tool is specifically oriented to work with large amounts of data taking adv
 
 ### More information
 > &Oacute;scar Castellanos-Rodr&iacute;guez, Roberto R. Exp&oacute;sito, Juan Touriño, [SeQual-Stream: approaching stream processing to quality control of NGS datasets](https://doi.org/10.1186/s12859-023-05530-7). BMC Bioinformatics, 24:403, October 2023.
+
 > &Oacute;scar Castellanos-Rodr&iacute;guez, Roberto R. Exp&oacute;sito, Juan Touriño, [Accelerating the quality control of genetic sequences through stream processing](https://doi.org/10.1145/3555776.3577785), in Proceedings of the 38th ACM/SIGAPP Symposium on Applied Computing (SAC '23), Tallinn, Estonia, March 2023, pp. 398–401.
 
 ## Getting Started
